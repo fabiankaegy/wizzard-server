@@ -1,6 +1,4 @@
-const { values, colors } = require("../gamelogic/general");
 const Wizzard = require("../gamelogic/Wizzard");
-const compareCards = require("../gamelogic/compareCards");
 
 describe("Deck", () => {
 	let myGame;
