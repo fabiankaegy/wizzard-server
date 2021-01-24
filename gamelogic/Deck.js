@@ -1,5 +1,6 @@
 const { VALUES, COLORS } = require("./general");
 const Card = require("./Card");
+const { shuffle } = require('./helper');
 
 /**
  * Deck
@@ -34,23 +35,7 @@ class Deck {
 	}
 
 	shuffle() {
-		const array = this.cards;
-		var currentIndex = array.length, temporaryValue, randomIndex;
-
-		// While there remain elements to shuffle...
-		while (0 !== currentIndex) {
-
-			// Pick a remaining element...
-			randomIndex = Math.floor(Math.random() * currentIndex);
-			currentIndex -= 1;
-
-			// And swap it with the current element.
-			temporaryValue = array[currentIndex];
-			array[currentIndex] = array[randomIndex];
-			array[randomIndex] = temporaryValue;
-		}
-
-		this.cards = array;
+		this.cards = shuffle( this.cards );
 	}
 
 	drawCards(amount) {
