@@ -43,7 +43,7 @@ class Player {
 		return card;
 	}
 
-	drawCards(cards) {
+	setCards(cards) {
 		this.cards = cards;
 	}
 
