@@ -1,6 +1,5 @@
-const Player = require("./Player");
 const Deck = require("./Deck");
-const compareCards = require("./compareCards");
+const Round = require("./Round");
 const { shuffle } = require('./helper');
 
 /**
@@ -15,12 +14,9 @@ class Wizzard {
 		this.rounds = this.deck.cards.length / this.players.length;
 		this.player = this.players.length;
 		this.currentRound = 1;
-		this.currentSubRound = 1;
-		this.currentTrump = null;
 
 		this.startGame();
 	}
-
 
 	/**
 	 * startGame
@@ -31,9 +27,18 @@ class Wizzard {
 	 */
 	startGame() {
 		this.setRandomPlayerOrder();
-		this.startRound();
+		this.round = new Round( this );
 	}
 
+	finishRound() {
+		if ( this.currentRound === this.rounds ) {
+			// end the game here.
+		} else {
+			this.movePlayerIndex();
+			this.currentRound++;
+			this.round.start();
+		}
+	}
 
 	/**
 	 * movePlayerIndex
@@ -50,39 +55,6 @@ class Wizzard {
 		this.players.push(first);
 	}
 
-	
-	/**
-	 * startRound
-	 * 
-	 * starts a new round of the game
-	 *
-	 * @memberof Wizzard
-	 */
-	startRound() {
-		this.deck.reset();
-		this.deck.shuffle();
-		this.drawCards();
-		this.drawTrumpf();
-	}
-
-	/**
-	 * endRound
-	 * 
-	 * end the currentRound and either end the game or start
-	 * a new round.
-	 *
-	 * @memberof Wizzard
-	 */
-	endRound() {
-		if ( this.currentRound === this.rounds ) {
-			// the game is finished now. Show the Winner. 
-		} else {
-			this.movePlayerIndex();
-			this.currentRound++;
-			this.startRound();
-		}
-	}
-
 	/**
 	 * setRandomPlayerOrder
 	 * 
@@ -96,36 +68,7 @@ class Wizzard {
 	setRandomPlayerOrder() {
 		this.players = shuffle( this.players );
 	}
-
-
-	/**
-	 * drawCards
-	 * 
-	 * Have each player draw their cards at the beginning
-	 * of each round.
-	 *
-	 * @memberof Wizzard
-	 */
-	drawCards() {
-		this.players.forEach( player => {
-			player.setCards( this.deck.drawCards( this.currentRound ) )
-		} )
-	}
-
-	drawTrumpf() {
-		this.currentTrump = this.deck.drawCards(1)[0];
-	}
 	
 }
 
 module.exports = Wizzard;
-
-
-const myGame = new Wizzard( [ new Player('Fabian'), new Player('Bea'), new Player('Tim'), new Player('moritz') ] );
-
-myGame.currentRound = 15;
-myGame.player //?
-myGame.startRound();
-myGame.players[0].cards //?
-
-myGame.currentTrump //?
