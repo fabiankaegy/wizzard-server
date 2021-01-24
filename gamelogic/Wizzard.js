@@ -13,6 +13,7 @@ class Wizzard {
 		this.players = Players;
 		this.deck = new Deck();
 		this.rounds = this.deck.cards.length / this.players.length;
+		this.player = this.players.length;
 		this.currentRound = 1;
 		this.currentSubRound = 1;
 		this.currentTrump = null;
@@ -123,6 +124,7 @@ module.exports = Wizzard;
 const myGame = new Wizzard( [ new Player('Fabian'), new Player('Bea'), new Player('Tim'), new Player('moritz') ] );
 
 myGame.currentRound = 15;
+myGame.player //?
 myGame.startRound();
 myGame.players[0].cards //?
 
