@@ -1,7 +1,7 @@
 # Gameplay 
 
 ## Rounds 
-Each round every player gets an increasing number of cards. This starts in round 1 with 1 card per player and goes up till all the cards are being used up.
+The first round starts with each player having one card on their hand. The amount of cards increases by one each round. The game ends when there are no cards left.
 
 - Shuffle Card Deck
 - Choose a random player to start the game
