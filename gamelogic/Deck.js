@@ -1,4 +1,4 @@
-const { VALUES, COCOLORS } = require("./general");
+const { VALUES, COLORS } = require("./general");
 const Card = require("./Card");
 
 /**

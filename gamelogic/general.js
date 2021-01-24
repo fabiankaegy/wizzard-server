@@ -1,11 +1,11 @@
-const colors = {
+const COLORS = {
 	red: "Red",
 	blue: "Blue",
 	green: "Green",
 	yellow: "Yellow"
 };
 
-const values = {
+const VALUES = {
 	Narr: { number: 0, sign: "N" },
 	1: { number: 1, sign: "1" },
 	2: { number: 2, sign: "2" },
@@ -24,6 +24,6 @@ const values = {
 };
 
 module.exports = {
-	values,
-	colors
+	VALUES,
+	COLORS
 };
