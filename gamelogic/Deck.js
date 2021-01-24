@@ -1,4 +1,4 @@
-const { values, colors } = require("./general");
+const { VALUES, COCOLORS } = require("./general");
 const Card = require("./Card");
 
 /**
@@ -8,8 +8,8 @@ class Deck {
 	constructor() {
 		this.cards = (() => {
 			const cards = [];
-			Object.values(values).forEach(value => {
-				for (let color in colors) {
+			Object.values(VALUES).forEach(value => {
+				for (let color in COLORS) {
 					cards.push(new Card(color, value));
 				}
 			});
@@ -20,8 +20,8 @@ class Deck {
 	reset() {
 		this.cards = (() => {
 			const cards = [];
-			for (let value in values) {
-				for (let color in colors) {
+			for (let value in VALUES) {
+				for (let color in COLORS) {
 					cards.push(new Card(color, value));
 				}
 			}

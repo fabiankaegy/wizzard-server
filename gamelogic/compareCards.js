@@ -1,8 +1,8 @@
-const { values } = require("./general");
+const { VALUES } = require("./general");
 
 const compareCards = (previous, current, trumpColor = false) => {
-	const isWizzard = current.value.number === values.Wizzard.number;
-	const isPreviousWizzard = previous.value.number === values.Wizzard.number;
+	const isWizzard = current.value.number === VALUES.Wizzard.number;
+	const isPreviousWizzard = previous.value.number === VALUES.Wizzard.number;
 	const isTrumpColor = current.color === trumpColor;
 	const isSameColor = current.color === previous.color;
 	const isLargerValue = current.value.number > previous.value.number;
