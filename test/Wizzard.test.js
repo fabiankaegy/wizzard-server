@@ -1,10 +1,11 @@
 const Wizzard = require("../gamelogic/Wizzard");
+const Player = require('../gamelogic/Player');
 
 describe("Deck", () => {
 	let myGame;
 
 	beforeEach(() => {
-		myGame = new Wizzard(["Fabian", "Moritz", "Bea", "Michel"]);
+		myGame = new Wizzard([new Player("Fabian"), new Player("Moritz"), new Player("Bea"), new Player("Michel")]);
 	});
 
 	it("Player count works", () => {
