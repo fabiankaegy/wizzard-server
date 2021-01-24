@@ -12,7 +12,7 @@ The first round starts with each player having one card on their hand. The amoun
 For each round there are `n` number of Sub rounds. (`n` = number of cards each Player has )
 
 - The person whos turn its turrn it currently is in the main round will start the first subround. 
-- Starting with that person each player has to provide an estimates of how manny wins they will have in that subround. 
+- Starting with that person each player has to give a prediction of how manny wins they will have in that subround. 
 - Once all players have given their prediction the first person will start by laying down their first card. 
 - Turn b turn each player will play 1 card. 
   - If the person has the color of the previous card thex have to play that card 
