@@ -1,3 +1,9 @@
+/**
+ * shuffle
+ *
+ * @param {Array} array reorder the items in the array randomly
+ * @return {Array} shuffled array
+ */
 function shuffle( array ) {
     let currentIndex = array.length, temporaryValue, randomIndex;
 

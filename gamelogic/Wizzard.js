@@ -30,6 +30,14 @@ class Wizzard {
 		this.round = new Round( this );
 	}
 
+	/**
+	 * finishRound
+	 * 
+	 * Finish the current round and figure out wether to 
+	 * start a new one or finish the game
+	 *
+	 * @memberof Wizzard
+	 */
 	finishRound() {
 		if ( this.currentRound === this.rounds ) {
 			// end the game here.

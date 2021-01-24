@@ -23,10 +23,11 @@ describe("Deck", () => {
 	});
 
 	it("can draw cards", () => {
-		const initialAmount = myDeck.amountLeft;
+		const initialAmount = myDeck.remainingCards;
 		const amount = 5;
-		const myCards = myDeck.drawCards(amount);
+		
+		myDeck.drawCards(amount);
 
-		expect(initialAmount - amount).toBe(myDeck.amountLeft);
+		expect(initialAmount - amount).toBe(myDeck.remainingCards);
 	});
 });

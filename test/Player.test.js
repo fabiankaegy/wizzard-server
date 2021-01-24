@@ -8,20 +8,20 @@ describe("Player", () => {
 	});
 
 	it("calculates correct score for correct predicted stashes", () => {
-		Fabian.predict(2);
-		Fabian.actual(2);
+		Fabian.setPrediction(2);
+		Fabian.setActual(2);
 		expect(Fabian.score).toBe(40);
 	});
 
 	it("calculates correct score for too low predicted stashes", () => {
-		Fabian.predict(2);
-		Fabian.actual(0);
+		Fabian.setPrediction(2);
+		Fabian.setActual(0);
 		expect(Fabian.score).toBe(-20);
 	});
 
 	it("calculates correct score for too highly predicted stashes", () => {
-		Fabian.predict(5);
-		Fabian.actual(10);
+		Fabian.setPrediction(5);
+		Fabian.setActual(10);
 		expect(Fabian.score).toBe(50);
 	});
 });

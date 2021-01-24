@@ -1,5 +1,17 @@
+/**
+ * Round
+ * 
+ * A representation of initial game rounds
+ *
+ * @class Round
+ */
 class Round {
-    constructor(game) {
+    /**
+	 * Creates an instance of Round.
+	 * @param {Wizzard} game game instance
+	 * @memberof Round
+	 */
+	constructor(game) {
         this.game = game;
 
         this.start();
@@ -41,8 +53,9 @@ class Round {
 	 */
 	drawCards() {
 		this.game.players.forEach( player => {
-			player.setCards( this.game.deck.drawCards( this.number ) )
-		} )
+			const cards = this.game.deck.drawCards( this.number );
+			player.setCards( cards );
+		} );
 	}
 
 	/**
@@ -53,7 +66,7 @@ class Round {
      * @memberof Round
      */
     drawTrumpf() {
-		this.trumpf = this.game.deck.drawCards(1)[0];
+		this.trumpf = this.game.deck.drawCard();
 	}
 	
 }
