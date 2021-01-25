@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Card
  */
@@ -42,4 +42,4 @@ var Card = /** @class */ (function () {
     });
     return Card;
 }());
-exports["default"] = Card;
+exports.default = Card;

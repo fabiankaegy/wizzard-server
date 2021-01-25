@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Round
  *
@@ -69,4 +69,4 @@ var Round = /** @class */ (function () {
     };
     return Round;
 }());
-exports["default"] = Round;
+exports.default = Round;

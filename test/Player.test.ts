@@ -1,7 +1,7 @@
-const Player = require("../gamelogic/Player");
+import Player from "../gamelogic/Player";
 
 describe("Player", () => {
-	let Fabian;
+	let Fabian: Player;
 
 	beforeEach(() => {
 		Fabian = new Player("Fabian");

@@ -1,18 +1,20 @@
-var app = require("express")();
-var http = require("http").createServer(app);
-var io = require("socket.io")(http);
+import express, { Request, Response } from "express";
+import http from "http";
+import socketio, { Socket } from 'socket.io';
 
-const Wizzard = require("./gamelogic/Wizzard");
-const Player = require("./gamelogic/Player");
-const compareCards = require("./gamelogic/compareCards");
-const { values, colors } = require("./gamelogic/general");
+const app = express();
+const server = http.createServer(app);
+const io = socketio(server);
 
-app.get("/", function(req, res) {
+import Wizzard from "./gamelogic/Wizzard";
+import Player from "./gamelogic/Player";
+
+app.get("/", function(req: Request, res: Response) {
 	res.json({ message: "Hallo Welt!" });
 });
 
-let players = [];
-let game;
+let players: Player[];
+let game: Wizzard;
 
 io.sockets.on("connection", socket => {
 	socket.emit("welcome", {
@@ -20,7 +22,7 @@ io.sockets.on("connection", socket => {
 	});
 
 	socket.on("add_player", player => {
-		const newPlayer = new Player(player.name, socket.id);
+		const newPlayer = new Player(player.name, socket.id, socket);
 		players.push(newPlayer);
 		socket.emit("player_created", newPlayer);
 		io.emit(
@@ -44,9 +46,9 @@ io.sockets.on("connection", socket => {
 			currentRound: game.currentRound
 		});
 
-		game.startRound();
+		game.startGame();
 
-		game.players.forEach(player => {
+		game.players.forEach( (player: Player) => {
 			sendUpdatedPlayer(player);
 		});
 
@@ -56,18 +58,18 @@ io.sockets.on("connection", socket => {
 	socket.on("play_card", payload => {
 		const { card, player } = payload;
 		console.log(`${player.name} played ${card.color}${card.value}`);
-		livePlayer = game.findPlayer(player.id);
-		cardIndex = livePlayer.findCardIndex(card);
+		const livePlayer = game.findPlayer(player.id);
+		const cardIndex = livePlayer.findCardIndex(card);
 		livePlayer.playCard(cardIndex);
 		sendUpdatedPlayer(livePlayer);
 	});
 
-	const sendUpdatedPlayer = player => {
+	const sendUpdatedPlayer = (player: Player) => {
 		const socket = io.to(player.id);
 		socket.emit("player_updated", player);
 	};
 });
 
-http.listen(3000, function() {
+server.listen(3000, function() {
 	console.log("listening on *:3000");
 });

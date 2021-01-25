@@ -1,7 +1,10 @@
 "use strict";
-exports.__esModule = true;
-var Deck_1 = require("./Deck");
-var Round_1 = require("./Round");
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var Deck_1 = __importDefault(require("./Deck"));
+var Round_1 = __importDefault(require("./Round"));
 var helper_1 = require("./helper");
 /**
  * Wizzard
@@ -11,7 +14,7 @@ var helper_1 = require("./helper");
 var Wizzard = /** @class */ (function () {
     function Wizzard(Players) {
         this.players = Players;
-        this.deck = new Deck_1["default"]();
+        this.deck = new Deck_1.default();
         this.rounds = this.deck.cards.length / this.players.length;
         this.player = this.players.length;
         this.currentRound = 1;
@@ -26,7 +29,7 @@ var Wizzard = /** @class */ (function () {
      */
     Wizzard.prototype.startGame = function () {
         this.setRandomPlayerOrder();
-        this.round = new Round_1["default"](this);
+        this.round = new Round_1.default(this);
     };
     /**
      * finishRound
@@ -43,7 +46,7 @@ var Wizzard = /** @class */ (function () {
         else {
             this.movePlayerIndex();
             this.currentRound++;
-            this.round = new Round_1["default"](this);
+            this.round = new Round_1.default(this);
             this.round.start();
         }
     };
@@ -96,4 +99,4 @@ var Wizzard = /** @class */ (function () {
     });
     return Wizzard;
 }());
-exports["default"] = Wizzard;
+exports.default = Wizzard;

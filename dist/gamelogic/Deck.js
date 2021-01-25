@@ -1,7 +1,10 @@
 "use strict";
-exports.__esModule = true;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 var general_1 = require("./general");
-var Card_1 = require("./Card");
+var Card_1 = __importDefault(require("./Card"));
 var helper_1 = require("./helper");
 /**
  * Deck
@@ -87,11 +90,11 @@ var Deck = /** @class */ (function () {
         var cards = [];
         Object.values(general_1.VALUES).forEach(function (value) {
             Object.values(general_1.COLORS).forEach(function (color) {
-                cards.push(new Card_1["default"](color, value));
+                cards.push(new Card_1.default(color, value));
             });
         });
         return cards;
     };
     return Deck;
 }());
-exports["default"] = Deck;
+exports.default = Deck;
