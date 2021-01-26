@@ -4,7 +4,7 @@
  * @param {Array} array reorder the items in the array randomly
  * @return {Array} shuffled array
  */
-function shuffle( array ) {
+export function shuffle( array: any[] ) {
     let currentIndex = array.length, temporaryValue, randomIndex;
 
     // While there remain elements to shuffle...
@@ -21,8 +21,4 @@ function shuffle( array ) {
     }
 
 	return array;
-}
-
-module.exports = {
-    shuffle
 }

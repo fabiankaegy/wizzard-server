@@ -1,7 +1,7 @@
-const Deck = require("../gamelogic/Deck");
+import Deck from "../gamelogic/Deck";
 
 describe("Deck", () => {
-	let myDeck;
+	let myDeck: Deck;
 
 	beforeEach(() => {
 		myDeck = new Deck();

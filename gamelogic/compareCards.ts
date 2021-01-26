@@ -1,14 +1,16 @@
-const { VALUES } = require("./general");
+import Card from "./Card";
+import { VALUES } from "./general";
 
 /**
  * compareCards
  *
+ * @export
  * @param {Card} previous card to beat in the comparrison
  * @param {Card} current card that will be compared to the currently best card
- * @param {boolean} [trumpColor=true] color of the current trumpf
- * @returns
+ * @param {(string | boolean)} [trumpColor=false] color of the current trumpf
+ * @returns {boolean}
  */
-const compareCards = (previous, current, trumpColor = false) => {
+export default function compareCards (previous: Card, current: Card, trumpColor: string | boolean = false): boolean {
 	const isWizzard = current.value.number === VALUES.Wizzard.number;
 	const isPreviousWizzard = previous.value.number === VALUES.Wizzard.number;
 	const isTrumpColor = current.color === trumpColor;
@@ -24,5 +26,3 @@ const compareCards = (previous, current, trumpColor = false) => {
 	}
 	return false;
 };
-
-module.exports = compareCards;

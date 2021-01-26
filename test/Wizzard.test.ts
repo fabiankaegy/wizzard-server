@@ -1,8 +1,8 @@
-const Wizzard = require("../gamelogic/Wizzard");
-const Player = require('../gamelogic/Player');
+import Wizzard from "../gamelogic/Wizzard";
+import Player from '../gamelogic/Player';
 
 describe("Deck", () => {
-	let myGame;
+	let myGame: Wizzard;
 
 	beforeEach(() => {
 		myGame = new Wizzard([new Player("Fabian"), new Player("Moritz"), new Player("Bea"), new Player("Michel")]);

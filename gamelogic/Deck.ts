@@ -1,11 +1,13 @@
-const { VALUES, COLORS } = require("./general");
-const Card = require("./Card");
-const { shuffle } = require('./helper');
+import { VALUES, COLORS } from "./general";
+import Card from "./Card";
+import { shuffle } from './helper';
 
 /**
  * Deck
  */
-class Deck {
+export default class Deck {
+
+	cards: Card[];
 
 	/**
 	 * Creates an instance of Deck.
@@ -62,7 +64,7 @@ class Deck {
 	 * @return {Array} array of Cards
 	 * @memberof Deck
 	 */
-	drawCards(amount) {
+	drawCards(amount: number) {
 		return this.cards.splice(0, amount);
 	}
 
@@ -90,14 +92,14 @@ class Deck {
 	 * @memberof Deck
 	 */
 	static create() {
-		const cards = [];
-		for (let value in VALUES) {
-			for (let color in COLORS) {
+		const cards: Card[] = [];
+
+		Object.values( VALUES ).forEach( value => {
+			Object.values( COLORS ).forEach( color => {
 				cards.push(new Card(color, value));
-			}
-		}
+			})
+		});
+
 		return cards;
 	}
 }
-
-module.exports = Deck;

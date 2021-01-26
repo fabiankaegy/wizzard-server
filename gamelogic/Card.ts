@@ -1,7 +1,11 @@
+import { CardValue } from "./general";
+
 /**
  * Card
  */
-class Card {
+export default class Card {
+	color: string;
+	value: CardValue;
 
 	/**
 	 * Creates an instance of Card.
@@ -9,7 +13,7 @@ class Card {
 	 * @param {*} number
 	 * @memberof Card
 	 */
-	constructor(color, number) {
+	constructor(color: string, number: CardValue) {
 		this.color = color;
 		this.value = number;
 	}
@@ -20,7 +24,7 @@ class Card {
 	 * @readonly
 	 * @memberof Card
 	 */
-	get name() {
+	get name(): string {
 		return `${this.color} ${this.value}`;
 	}
 
@@ -30,9 +34,7 @@ class Card {
 	 * @readonly
 	 * @memberof Card
 	 */
-	get sign() {
+	get sign(): string {
 		return this.value.sign;
 	}
 }
-
-module.exports = Card;
