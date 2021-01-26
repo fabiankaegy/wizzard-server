@@ -4,6 +4,13 @@ import Wizzard from "./Wizzard";
 import compareCards from "./compareCards";
 import { SocketInteractions, PlayerInteractions, PlayerCardCombo } from './Types';
 
+type SubRoundOptions = {
+    players: Player[],
+	currentRound: number,
+    shareUpdates: Function,
+    trumpf: Card,
+}
+
 /**
  * SubRound
  * 
@@ -13,17 +20,19 @@ import { SocketInteractions, PlayerInteractions, PlayerCardCombo } from './Types
  * @class SubRound
  */
 export default class SubRound {
-    game: Wizzard;
     round: number;
     players: Player[];
     playedCards: PlayerCardCombo[];
+    shareUpdates: Function;
     bestCard?: PlayerCardCombo; 
     currentPlayer?: Player;
+    trumpf?: Card;
 
-    constructor(game: Wizzard) {
-        this.game = game;
-        this.round = game.currentRound;
-        this.players = game.players;
+    constructor(options: SubRoundOptions) {
+        this.round = options.currentRound;
+        this.players = options.players;
+        this.shareUpdates = options.shareUpdates;
+        this.trumpf = options.trumpf;
         this.playedCards = [];
     }
 
@@ -45,7 +54,7 @@ export default class SubRound {
      */
     end() {
         this.bestCard!.player.increaseWins();
-        this.game.shareGameState();
+        this.shareUpdates();
     }
 
     /**
@@ -99,7 +108,7 @@ export default class SubRound {
         const isNewBestCard = compareCards( 
             this.bestCard?.card ?? this.playedCards[this.playedCards.length -1].card,
             card,
-            this.game.round?.trumpf ? this.game.round.trumpf.color : false );
+            this.trumpf?.color );
 
         if ( isNewBestCard ) {
             this.bestCard = {player, card};

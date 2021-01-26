@@ -2,6 +2,9 @@ import { CardValue } from "./general";
 
 /**
  * Card
+ *
+ * @export
+ * @class Card
  */
 export default class Card {
 	color: string;
@@ -19,9 +22,10 @@ export default class Card {
 	}
 
 	/**
-	 * get name
+	 * name
 	 *
 	 * @readonly
+	 * @type {string}
 	 * @memberof Card
 	 */
 	get name(): string {
@@ -29,9 +33,10 @@ export default class Card {
 	}
 
 	/**
-	 * get sign
+	 * sign
 	 *
 	 * @readonly
+	 * @type {string}
 	 * @memberof Card
 	 */
 	get sign(): string {

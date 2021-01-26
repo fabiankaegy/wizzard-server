@@ -5,7 +5,7 @@ describe("Deck", () => {
 	let myGame: Wizzard;
 
 	beforeEach(() => {
-		myGame = new Wizzard([new Player("Fabian"), new Player("Moritz"), new Player("Bea"), new Player("Michel")]);
+		myGame = new Wizzard([new Player({name: "Fabian"}), new Player({name: "Moritz"}), new Player({name: "Bea"}), new Player({name: "Michel"})]);
 	});
 
 	it("Player count works", () => {

@@ -4,7 +4,7 @@ describe("Player", () => {
 	let Fabian: Player;
 
 	beforeEach(() => {
-		Fabian = new Player("Fabian");
+		Fabian = new Player({name:"Fabian"});
 	});
 
 	it("calculates correct score for correct predicted stashes", () => {

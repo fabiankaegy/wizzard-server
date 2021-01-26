@@ -2,9 +2,29 @@ import { Socket } from 'socket.io';
 import Card from './Card';
 import { SocketInteractions } from './Types';
 
+export type PlayerPublicInfo = {
+	id: string,
+	name: string,
+	wins: number,
+	prediction: number,
+	score: number
+};
+
+export interface PlayerPrivateInfo extends PlayerPublicInfo{
+	cards: Card[],
+};
+
+export type PlayerOptions = {
+	name: string,
+	id?: string,
+	socket?: Socket
+}
 
 /**
  * Player
+ *
+ * @export
+ * @class Player
  */
 export default class Player {
 	name: string;
@@ -22,11 +42,11 @@ export default class Player {
 	 * @param {String} socket
 	 * @memberof Player
 	 */
-	constructor(name: string, id?: string, socket?: Socket) {
-		this.name = name;
+	constructor(options: PlayerOptions) {
+		this.name = options.name;
 		this.score = 0;
-		this.id = id || 'none';
-		this.socket = socket;
+		this.id = options.id || 'none';
+		this.socket = options.socket;
 		this.wins = 0;
 
 		this.socket?.emit( SocketInteractions.playerCreated, this.privateInfo );
@@ -43,7 +63,7 @@ export default class Player {
 			throw new Error(`The Player ${this.name} already made their prediction.`);
 		}
 
-		this.resetWins()
+		this.resetWins();
 		this.prediction = stashes;
 	}
 
@@ -81,7 +101,7 @@ export default class Player {
 	 * playCard
 	 *
 	 * @param {Number} index index of the card the player wants to play
-	 * @return {Card} the card the player chose
+	 * @returns {Card} the card the player chose
 	 * @memberof Player
 	 */
 	playCard(index: number): Card {
@@ -109,7 +129,7 @@ export default class Player {
 	 * findCardIndex
 	 *
 	 * @param {Card} cardSearched
-	 * @return {Number} Index of the card in the players cards
+	 * @returns {Number} Index of the card in the players cards
 	 * @memberof Player
 	 */
 	findCardIndex(cardSearched: Card): Number {
@@ -138,7 +158,6 @@ export default class Player {
 		this.wins = this.wins +by;
 	}
 
-
 	/**
 	 * resetWins
 	 *
@@ -162,15 +181,16 @@ export default class Player {
 	 *
 	 * @readonly
 	 * @private
+	 * @type {PlayerPrivateInfo}
 	 * @memberof Player
 	 */
-	private get privateInfo() {
+	private get privateInfo(): PlayerPrivateInfo {
 		return {
 			id: this.id,
 			name: this.name,
-			cards: this.cards,
+			cards: this.cards!,
 			wins: this.wins,
-			prediction: this.prediction,
+			prediction: this.prediction!,
 			score: this.score
 		}
 	}
@@ -179,14 +199,15 @@ export default class Player {
 	 * publicInfo
 	 *
 	 * @readonly
+	 * @type {PlayerPublicInfo}
 	 * @memberof Player
 	 */
-	get publicInfo() {
+	get publicInfo(): PlayerPublicInfo {
 		return {
 			id: this.id,
 			name: this.name,
 			wins: this.wins,
-			prediction: this.prediction,
+			prediction: this.prediction!,
 			score: this.score
 		}
 	}

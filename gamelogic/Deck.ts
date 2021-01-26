@@ -4,9 +4,11 @@ import { shuffle } from './helper';
 
 /**
  * Deck
+ *
+ * @export
+ * @class Deck
  */
 export default class Deck {
-
 	cards: Card[];
 
 	/**
@@ -29,16 +31,16 @@ export default class Deck {
 		this.cards = Deck.create();
 	}
 
-
 	/**
 	 * remainingCards
 	 * 
 	 * get the number of cards left in the deck
-	 * 
+	 *
 	 * @readonly
+	 * @type {number}
 	 * @memberof Deck
 	 */
-	get remainingCards() {
+	get remainingCards(): number {
 		return this.cards.length;
 	}
 
@@ -61,10 +63,10 @@ export default class Deck {
 	 * draw a certain amount of cards tom the deck
 	 *
 	 * @param {*} amount
-	 * @return {Array} array of Cards
+	 * @returns {Card[]}
 	 * @memberof Deck
 	 */
-	drawCards(amount: number) {
+	drawCards(amount: number): Card[] {
 		return this.cards.splice(0, amount);
 	}
 
@@ -73,10 +75,10 @@ export default class Deck {
 	 * drawCard
 	 *
 	 * Draw a singular card from the deck
-	 * @return {Card} singular Card
+	 * @returns {Card} singular Card
 	 * @memberof Deck
 	 */
-	drawCard() {
+	drawCard(): Card {
 		return this.drawCards(1)[0];
 	}
 
@@ -88,10 +90,10 @@ export default class Deck {
 	 * wen it gets reset.
 	 *
 	 * @static
-	 * @returns
+	 * @returns {Card[]}
 	 * @memberof Deck
 	 */
-	static create() {
+	static create(): Card[] {
 		const cards: Card[] = [];
 
 		Object.values( VALUES ).forEach( value => {

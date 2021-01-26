@@ -21,7 +21,11 @@ io.sockets.on("connection", socket => {
 	});
 
 	socket.on(SocketInteractions.createPlayer, player => {
-		const newPlayer = new Player(player.name, socket.id, socket);
+		const newPlayer = new Player({
+			name: player.name,
+			id: socket.id,
+			socket
+		});
 		players.push(newPlayer);
 		io.emit(
 			SocketInteractions.sharePlayersList,

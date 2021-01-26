@@ -2,9 +2,9 @@
  * shuffle
  *
  * @param {Array} array reorder the items in the array randomly
- * @return {Array} shuffled array
+ * @returns {Array} shuffled array
  */
-export function shuffle( array: any[] ) {
+export function shuffle( array: any[] ): any[] {
     let currentIndex = array.length, temporaryValue, randomIndex;
 
     // While there remain elements to shuffle...

@@ -17,7 +17,6 @@ export type RoundOptions = {
  * @class Round
  */
 export default class Round {
-
 	deck: Deck;
 	players: Player[];
 	number: number = 0;
