@@ -7,7 +7,7 @@
 		"serve": "nodemon dist/server.js",
 		"start": "ts-node server.ts",
 		"build": "tsc --project tsconfig.json",
-		"test": "jest --watchAll"
+		"test": "jest --watchAll --silent"
 	},
 	"repository": {
 		"type": "git",

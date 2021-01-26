@@ -11,12 +11,16 @@ function error( input: any ) {
 function info( input: any ) {
 	console.log( input );
 };
+
 function success( input: any ) {
 	console.log( chalk.bold.green( input ) );
 };
 
 const log = {
-    code,error,info,success
+	code,
+	error,
+	info,
+	success
 }
 
 export default log;
