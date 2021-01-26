@@ -4,6 +4,7 @@ import Card from './Card';
 enum SocketInteractions {
     recivePlayerInteraction = 'player_interaction',
     startGame = 'start_game',
+    gameStarted = 'game_started',
     welcome = 'welcome',
     shareGameState = 'share_game_state',
 	sharePlayerState = 'share_player_state', 

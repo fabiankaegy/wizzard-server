@@ -1,5 +1,7 @@
 import { Socket } from 'socket.io';
 import Card from './Card';
+import { SocketInteractions } from './Types';
+
 
 /**
  * Player
@@ -26,6 +28,8 @@ export default class Player {
 		this.id = id || 'none';
 		this.socket = socket;
 		this.wins = 0;
+
+		this.socket?.emit( SocketInteractions.playerCreated, this.privateInfo );
 	}
 
 	/**
@@ -54,7 +58,7 @@ export default class Player {
 			throw new Error( `The Player ${this.name} hasn't made any predictions jet` );
 		}
 
-		if (this.prediction === this.wins) {
+		if (this.hasCorrectPrediction) {
 			this.updateScore(this.wins * 10 + 20);
 		} else {
 			const offBy = Math.abs(this.prediction - this.wins);
@@ -144,7 +148,23 @@ export default class Player {
 		this.wins = 0;
 	}
 
-	get privateInfo() {
+	/**
+	 * sharePlayerPrivateInfo
+	 *
+	 * @memberof Player
+	 */
+	sharePlayerPrivateInfo() {
+		this.socket?.emit( SocketInteractions.sharePlayerState, this.privateInfo )
+	}
+
+	/**
+	 * privateInfo
+	 *
+	 * @readonly
+	 * @private
+	 * @memberof Player
+	 */
+	private get privateInfo() {
 		return {
 			id: this.id,
 			name: this.name,
@@ -155,6 +175,12 @@ export default class Player {
 		}
 	}
 
+	/**
+	 * publicInfo
+	 *
+	 * @readonly
+	 * @memberof Player
+	 */
 	get publicInfo() {
 		return {
 			id: this.id,
@@ -163,5 +189,16 @@ export default class Player {
 			prediction: this.prediction,
 			score: this.score
 		}
+	}
+
+	/**
+	 * hasCorrectPrediction
+	 *
+	 * @readonly
+	 * @type {boolean}
+	 * @memberof Player
+	 */
+	get hasCorrectPrediction(): boolean {
+		return this.prediction === this.wins;
 	}
 }

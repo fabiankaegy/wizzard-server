@@ -2,13 +2,18 @@ import Deck from "./Deck";
 import Round from "./Round";
 import { shuffle } from './helper';
 import Player from "./Player";
-import { Server, Socket } from "socket.io";
+import { Server } from "socket.io";
 import { SocketInteractions, GameState } from './Types';
+import Card from "./Card";
+import log from "../helper";
 
 /**
  * Wizzard
  * 
  * This is the main game implementation of the game Wizzard
+ *
+ * @export
+ * @class Wizzard
  */
 export default class Wizzard {
 
@@ -18,15 +23,27 @@ export default class Wizzard {
 	currentRound: number;
 	round?: Round;
 	state: GameState;
-	socket?: Server;
+	server?: Server;
 
-	constructor(Players: Player[], socket?: Server) {
+	/**
+	 * Creates an instance of Wizzard.
+	 * @param {Player[]} Players
+	 * @param {Server} [server]
+	 * @memberof Wizzard
+	 */
+	constructor(Players: Player[], server?: Server) {
 		this.players = Players;
 		this.rounds = Deck.length / this.players.length;
 		this.player = this.players.length;
 		this.currentRound = 1;
 		this.state = GameState.Created;
-		this.socket = socket;
+		this.server = server;
+
+		this.startGame = this.startGame.bind(this);
+		this.handleRoundCompletion = this.handleRoundCompletion.bind(this);
+		this.movePlayerIndex = this.movePlayerIndex.bind(this);
+		this.findPlayer = this.findPlayer.bind(this);
+		this.shareGameState = this.shareGameState.bind(this);
 
 		this.startGame();
 	}
@@ -40,27 +57,41 @@ export default class Wizzard {
 	 */
 	startGame() {
 		this.setRandomPlayerOrder();
-		this.round = new Round( this.players, this.currentRound, this.shareGameState, this.finishRound );
+		this.round = this.createRound();
 		this.state = GameState.Started
 	}
 
 	/**
-	 * finishRound
+	 * createRound
+	 *
+	 * @returns {Round}
+	 * @memberof Wizzard
+	 */
+	createRound():Round {
+		return new Round({
+			players: this.players,
+			currentRound: this.currentRound,
+			shareUpdates: this.shareGameState,
+			endRound: this.handleRoundCompletion
+		});
+	}
+
+	/**
+	 * handleRoundCompletion
 	 * 
 	 * Finish the current round and figure out wether to 
 	 * start a new one or finish the game
 	 *
 	 * @memberof Wizzard
 	 */
-	finishRound() {
+	handleRoundCompletion() {
 		if ( this.currentRound === this.rounds ) {
 			this.state = GameState.Completed;
 			// end the game here.
 		} else {
 			this.movePlayerIndex();
 			this.currentRound++;
-			this.round = new Round( this.players, this.currentRound, this.shareGameState, this.finishRound );
-			this.round.start();
+			this.round = this.createRound();
 		}
 	}
 
@@ -86,30 +117,26 @@ export default class Wizzard {
 	 * shuffle arround the array of players to randomly 
 	 * choose the order in which the rounds will be played.
 	 * In a normal game this will only be called once as 
-	 * part of the initial setup. 
+	 * part of the initial setup.
 	 *
+	 * @private
 	 * @memberof Wizzard
 	 */
-	setRandomPlayerOrder() {
+	private setRandomPlayerOrder() {
 		this.players = shuffle( this.players );
 	}
 
 	/**
 	 * findPlayer
 	 * 
-	 * find a player via the id
+	 * find a player via their id
 	 *
 	 * @param {string} id
-	 * @returns
+	 * @returns {Player}
 	 * @memberof Wizzard
 	 */
-	findPlayer( id: string ) {
+	findPlayer( id: string ): Player {
 		return this.players.find( (player: Player) => player.id === id )!;
-	}
-
-	get currentTrump() {
-		console.log(this.round)
-		return this.round?.trumpf;
 	}
 
 	/**
@@ -119,19 +146,23 @@ export default class Wizzard {
 	 *
 	 * @memberof Wizzard
 	 */
-	shareGameState() {
+	shareGameState(options?:{ trumpf?: Card }) {
 
 		const gameState = {
 			players: this.players.map( player => player.publicInfo ),
 			gameState: this.state,
 			currentRound: this.currentRound,
-			trumpf: this.currentTrump,
+			trumpf: options?.trumpf,
 		}
 
-		this.socket?.emit( SocketInteractions.shareGameState, gameState );
-		console.log( "Game State:", gameState )
+		this.server?.emit( SocketInteractions.shareGameState, gameState );
+		log.code( "Game State:" );
+		log.info( gameState );
+		log.info( '' );
 
-		this.players.forEach( player => player.socket?.emit( SocketInteractions.sharePlayerState, player.privateInfo ))
+		this.players.forEach(
+			player => player.sharePlayerPrivateInfo()
+		);
 	}
 	
 }

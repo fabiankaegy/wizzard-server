@@ -2,6 +2,13 @@ import Card from "./Card";
 import Deck from "./Deck";
 import Player from "./Player";
 
+export type RoundOptions = {
+	players: Player[],
+	currentRound: number,
+	shareUpdates: Function,
+	endRound: Function
+};
+
 /**
  * Round
  * 
@@ -26,13 +33,13 @@ export default class Round {
 	 * @param {Function} endround
 	 * @memberof Round
 	 */
-	constructor( players: Player[], currentRound: number, shareUpdates: Function, endRound: Function) {
+	constructor(options: RoundOptions) {
         this.deck = new Deck();
-        this.players = players;
+        this.players = options.players;
 		this.trumpf = undefined;
-		this.number = currentRound;
-		this.shareUpdates = shareUpdates;
-		this.endRound = endRound;
+		this.number = options.currentRound;
+		this.shareUpdates = options.shareUpdates;
+		this.endRound = options.endRound;
         this.start();
     }
 
@@ -48,7 +55,7 @@ export default class Round {
 		this.deck.shuffle();
 		this.drawCards();
 		this.drawTrumpf();
-		this.shareUpdates();
+		this.shareUpdates({trumpf: this.trumpf});
     }
 
     /**
