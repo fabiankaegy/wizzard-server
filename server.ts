@@ -1,7 +1,6 @@
 import express from "express";
 import http from "http";
 import socketio from 'socket.io';
-import path from 'path';
 
 import Wizzard from "./gamelogic/Wizzard";
 import Player from "./gamelogic/Player";
@@ -16,9 +15,10 @@ let players: Player[] = [];
 let game: Wizzard;
 
 io.sockets.on("connection", socket => {
-	socket.emit( SocketInteractions.welcome , {
-		players
-	});
+	socket.emit(
+		SocketInteractions.sharePlayersList,
+		players.map(player => player.publicInfo)
+	);
 
 	socket.on(SocketInteractions.createPlayer, player => {
 		const newPlayer = new Player({
@@ -27,11 +27,30 @@ io.sockets.on("connection", socket => {
 			socket
 		});
 		players.push(newPlayer);
+		log.success( `Adding ${newPlayer.name}` );
 		io.emit(
 			SocketInteractions.sharePlayersList,
 			players.map(player => player.publicInfo)
 		);
 	});
+
+	socket.on('disconnect', () => {
+		const player = players.find( player => player.id === socket.id );
+
+		// bail early if no player exists
+		if ( !player ) {
+			return;
+		}
+
+		const index = players.indexOf(player);
+		log.error(`removing ${player.name}`)
+		players.splice(index, 1);
+		log.code( players );
+		io.emit(
+			SocketInteractions.sharePlayersList,
+			players.map(player => player.publicInfo)
+		);
+	} );
 
 	socket.on( SocketInteractions.startGame, () => {
 		log.success("Game Starting");
@@ -41,9 +60,6 @@ io.sockets.on("connection", socket => {
 		game = new Wizzard(players, io );
 	});
 });
-
-// Handles any requests that don't match the ones above
-app.get('*', express.static( path.join(__dirname+'/client/build/')) );
 
 const port = process.env.PORT || 5000;
 
