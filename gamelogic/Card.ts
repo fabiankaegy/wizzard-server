@@ -24,7 +24,7 @@ export default class Card {
 	 * @readonly
 	 * @memberof Card
 	 */
-	get name() {
+	get name(): string {
 		return `${this.color} ${this.value}`;
 	}
 
@@ -34,7 +34,7 @@ export default class Card {
 	 * @readonly
 	 * @memberof Card
 	 */
-	get sign() {
+	get sign(): string {
 		return this.value.sign;
 	}
 }

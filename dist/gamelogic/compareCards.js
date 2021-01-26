@@ -4,10 +4,11 @@ var general_1 = require("./general");
 /**
  * compareCards
  *
+ * @export
  * @param {Card} previous card to beat in the comparrison
  * @param {Card} current card that will be compared to the currently best card
- * @param {boolean} [trumpColor=true] color of the current trumpf
- * @returns
+ * @param {(string | boolean)} [trumpColor=false] color of the current trumpf
+ * @returns {boolean}
  */
 function compareCards(previous, current, trumpColor) {
     if (trumpColor === void 0) { trumpColor = false; }

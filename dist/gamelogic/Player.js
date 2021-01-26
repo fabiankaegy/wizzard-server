@@ -16,6 +16,7 @@ var Player = /** @class */ (function () {
         this.score = 0;
         this.id = id || 'none';
         this.socket = socket;
+        this.wins = 0;
     }
     /**
      * setPrediction
@@ -24,24 +25,28 @@ var Player = /** @class */ (function () {
      * @memberof Player
      */
     Player.prototype.setPrediction = function (stashes) {
+        if (this.prediction !== undefined) {
+            throw new Error("The Player " + this.name + " already made their prediction.");
+        }
+        this.resetWins();
         this.prediction = stashes;
     };
     /**
-     * setActual
+     * calculateScore
      *
      * @param {Number} stashes
      * @memberof Player
      */
-    Player.prototype.setActual = function (numberOfWins) {
+    Player.prototype.calculateScore = function () {
         if (this.prediction === undefined) {
-            throw new Error("The player hasn't made any predictions jet");
+            throw new Error("The Player " + this.name + " hasn't made any predictions jet");
         }
-        if (this.prediction === numberOfWins) {
-            this.updateScore(numberOfWins * 10 + 20);
+        if (this.prediction === this.wins) {
+            this.updateScore(this.wins * 10 + 20);
         }
         else {
-            var offBy = Math.abs(this.prediction - numberOfWins);
-            this.updateScore(numberOfWins * 10 + offBy * -10);
+            var offBy = Math.abs(this.prediction - this.wins);
+            this.updateScore(this.wins * 10 + offBy * -10);
         }
     };
     /**
@@ -98,6 +103,51 @@ var Player = /** @class */ (function () {
         }
         return this.cards.indexOf(card);
     };
+    /**
+     * increaseWins
+     *
+     * @param {number} [by=1]
+     * @memberof Player
+     */
+    Player.prototype.increaseWins = function (by) {
+        if (by === void 0) { by = 1; }
+        this.wins = this.wins + by;
+    };
+    /**
+     * resetWins
+     *
+     * @memberof Player
+     */
+    Player.prototype.resetWins = function () {
+        this.wins = 0;
+    };
+    Object.defineProperty(Player.prototype, "privateInfo", {
+        get: function () {
+            return {
+                id: this.id,
+                name: this.name,
+                cards: this.cards,
+                wins: this.wins,
+                prediction: this.prediction,
+                score: this.score
+            };
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Player.prototype, "publicInfo", {
+        get: function () {
+            return {
+                id: this.id,
+                name: this.name,
+                wins: this.wins,
+                prediction: this.prediction,
+                score: this.score
+            };
+        },
+        enumerable: false,
+        configurable: true
+    });
     return Player;
 }());
 exports.default = Player;

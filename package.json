@@ -4,7 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"start": "tsnd --respawn server.ts",
+		"serve": "nodemon dist/server.js",
+		"start": "ts-node server.ts",
 		"build": "tsc --project tsconfig.json",
 		"test": "jest --watchAll"
 	},
@@ -28,6 +29,7 @@
 		"jest": "^24.9.0",
 		"nodemon": "^1.19.4",
 		"socket.io": "^2.4.1",
+		"ts-node": "^9.1.1",
 		"ts-node-dev": "^1.1.1"
 	},
 	"devDependencies": {

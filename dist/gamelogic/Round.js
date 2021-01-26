@@ -31,6 +31,7 @@ var Round = /** @class */ (function () {
         this.game.deck.shuffle();
         this.drawCards();
         this.drawTrumpf();
+        this.game.shareGameState();
     };
     /**
      * end
@@ -65,7 +66,9 @@ var Round = /** @class */ (function () {
      * @memberof Round
      */
     Round.prototype.drawTrumpf = function () {
-        this.trumpf = this.game.deck.drawCard();
+        var card = this.game.deck.drawCard();
+        console.log(card);
+        this.trumpf = card;
     };
     return Round;
 }());

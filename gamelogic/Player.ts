@@ -11,6 +11,7 @@ export default class Player {
 	socket?: Socket;
 	prediction?: number;
 	cards?: Card[];
+	wins: number;
 
 	/**
 	 * Creates an instance of Player.
@@ -24,6 +25,7 @@ export default class Player {
 		this.score = 0;
 		this.id = id || 'none';
 		this.socket = socket;
+		this.wins = 0;
 	}
 
 	/**
@@ -33,26 +35,30 @@ export default class Player {
 	 * @memberof Player
 	 */
 	setPrediction(stashes:number) {
+		if ( this.prediction !== undefined) {
+			throw new Error(`The Player ${this.name} already made their prediction.`);
+		}
+
+		this.resetWins()
 		this.prediction = stashes;
 	}
 
 	/**
-	 * setActual
+	 * calculateScore
 	 *
 	 * @param {Number} stashes
 	 * @memberof Player
 	 */
-	setActual(numberOfWins: number) {
-
+	calculateScore() {
 		if ( this.prediction === undefined ) {
-			throw new Error( `The player hasn't made any predictions jet` );
+			throw new Error( `The Player ${this.name} hasn't made any predictions jet` );
 		}
 
-		if (this.prediction === numberOfWins) {
-			this.updateScore(numberOfWins * 10 + 20);
+		if (this.prediction === this.wins) {
+			this.updateScore(this.wins * 10 + 20);
 		} else {
-			const offBy = Math.abs(this.prediction - numberOfWins);
-			this.updateScore(numberOfWins * 10 + offBy * -10);
+			const offBy = Math.abs(this.prediction - this.wins);
+			this.updateScore(this.wins * 10 + offBy * -10);
 		}
 	}
 
@@ -74,7 +80,7 @@ export default class Player {
 	 * @return {Card} the card the player chose
 	 * @memberof Player
 	 */
-	playCard(index: number) {
+	playCard(index: number): Card {
 		if ( ! this.cards?.length ) {
 			throw new Error( `This Player doesn't have any card's Jet` );
 		}
@@ -102,7 +108,7 @@ export default class Player {
 	 * @return {Number} Index of the card in the players cards
 	 * @memberof Player
 	 */
-	findCardIndex(cardSearched: Card) {
+	findCardIndex(cardSearched: Card): Number {
 		if ( ! this.cards?.length ) {
 			throw new Error( `This Player doesn't have any card's Jet` );
 		}
@@ -116,5 +122,46 @@ export default class Player {
 		}
 
 		return this.cards.indexOf(card);
+	}
+
+	/**
+	 * increaseWins
+	 *
+	 * @param {number} [by=1]
+	 * @memberof Player
+	 */
+	increaseWins( by: number = 1 ) {
+		this.wins = this.wins +by;
+	}
+
+
+	/**
+	 * resetWins
+	 *
+	 * @memberof Player
+	 */
+	private resetWins() {
+		this.wins = 0;
+	}
+
+	get privateInfo() {
+		return {
+			id: this.id,
+			name: this.name,
+			cards: this.cards,
+			wins: this.wins,
+			prediction: this.prediction,
+			score: this.score
+		}
+	}
+
+	get publicInfo() {
+		return {
+			id: this.id,
+			name: this.name,
+			wins: this.wins,
+			prediction: this.prediction,
+			score: this.score
+		}
 	}
 }

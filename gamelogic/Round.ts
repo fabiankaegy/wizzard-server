@@ -1,5 +1,6 @@
-import Wizzard from "./Wizzard";
 import Card from "./Card";
+import Deck from "./Deck";
+import Player from "./Player";
 
 /**
  * Round
@@ -10,18 +11,28 @@ import Card from "./Card";
  */
 export default class Round {
 
-	game: Wizzard;
+	deck: Deck;
+	players: Player[];
 	number: number = 0;
 	trumpf?: Card;
+	shareUpdates: Function;
+	endRound: Function;
 
-    /**
+	/**
 	 * Creates an instance of Round.
-	 * @param {Wizzard} game game instance
+	 * @param {Player[]} players
+	 * @param {number} currentRound
+	 * @param {Function} shareUpdates
+	 * @param {Function} endround
 	 * @memberof Round
 	 */
-	constructor(game: Wizzard) {
-        this.game = game;
-
+	constructor( players: Player[], currentRound: number, shareUpdates: Function, endRound: Function) {
+        this.deck = new Deck();
+        this.players = players;
+		this.trumpf = undefined;
+		this.number = currentRound;
+		this.shareUpdates = shareUpdates;
+		this.endRound = endRound;
         this.start();
     }
 
@@ -33,11 +44,11 @@ export default class Round {
 	 * @memberof Round
 	 */
 	start() {
-        this.number = this.game.currentRound;
-		this.game.deck.reset();
-		this.game.deck.shuffle();
+		this.deck.reset();
+		this.deck.shuffle();
 		this.drawCards();
 		this.drawTrumpf();
+		this.shareUpdates();
     }
 
     /**
@@ -48,7 +59,7 @@ export default class Round {
      * @memberof Round
      */
     end() {
-        this.game.finishRound();
+        this.endRound();
     }
 
     /**
@@ -60,8 +71,8 @@ export default class Round {
 	 * @memberof Round
 	 */
 	drawCards() {
-		this.game.players.forEach( player => {
-			const cards = this.game.deck.drawCards( this.number );
+		this.players.forEach( player => {
+			const cards = this.deck.drawCards( this.number );
 			player.setCards( cards );
 		} );
 	}
@@ -74,7 +85,7 @@ export default class Round {
      * @memberof Round
      */
     drawTrumpf() {
-		this.trumpf = this.game.deck.drawCard();
+		const card = this.deck.drawCard();
+		this.trumpf = card;
 	}
-	
 }

@@ -6,18 +6,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Deck_1 = __importDefault(require("./Deck"));
 var Round_1 = __importDefault(require("./Round"));
 var helper_1 = require("./helper");
+var Types_1 = require("./Types");
 /**
  * Wizzard
  *
  * This is the main game implementation of the game Wizzard
  */
 var Wizzard = /** @class */ (function () {
-    function Wizzard(Players) {
+    function Wizzard(Players, socket) {
         this.players = Players;
         this.deck = new Deck_1.default();
         this.rounds = this.deck.cards.length / this.players.length;
         this.player = this.players.length;
         this.currentRound = 1;
+        this.state = Types_1.GameState.Created;
+        this.socket = socket;
         this.startGame();
     }
     /**
@@ -30,6 +33,7 @@ var Wizzard = /** @class */ (function () {
     Wizzard.prototype.startGame = function () {
         this.setRandomPlayerOrder();
         this.round = new Round_1.default(this);
+        this.state = Types_1.GameState.Started;
     };
     /**
      * finishRound
@@ -41,6 +45,7 @@ var Wizzard = /** @class */ (function () {
      */
     Wizzard.prototype.finishRound = function () {
         if (this.currentRound === this.rounds) {
+            this.state = Types_1.GameState.Completed;
             // end the game here.
         }
         else {
@@ -97,6 +102,25 @@ var Wizzard = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    /**
+     * shareGameState
+     *
+     * share the current state of the game with all connected players
+     *
+     * @memberof Wizzard
+     */
+    Wizzard.prototype.shareGameState = function () {
+        var _a;
+        var gameState = {
+            players: this.players.map(function (player) { return player.publicInfo; }),
+            gameState: this.state,
+            currentRound: this.currentRound,
+            trumpf: this.currentTrump,
+        };
+        (_a = this.socket) === null || _a === void 0 ? void 0 : _a.emit(Types_1.SocketInteractions.shareGameState, gameState);
+        console.log("Game State:", gameState);
+        this.players.forEach(function (player) { var _a; return (_a = player.socket) === null || _a === void 0 ? void 0 : _a.emit(Types_1.SocketInteractions.sharePlayerState, player.privateInfo); });
+    };
     return Wizzard;
 }());
 exports.default = Wizzard;
