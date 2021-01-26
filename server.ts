@@ -45,7 +45,6 @@ io.sockets.on("connection", socket => {
 		const index = players.indexOf(player);
 		log.error(`removing ${player.name}`)
 		players.splice(index, 1);
-		log.code( players );
 		io.emit(
 			SocketInteractions.sharePlayersList,
 			players.map(player => player.publicInfo)
