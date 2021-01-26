@@ -161,6 +161,7 @@ export default class Player {
 	/**
 	 * resetWins
 	 *
+	 * @private
 	 * @memberof Player
 	 */
 	private resetWins() {
