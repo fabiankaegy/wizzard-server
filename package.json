@@ -1,8 +1,8 @@
 {
-	"name": "wizzard-server",
+	"name": "wizzardgame",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
+	"main": "index.ts",
 	"scripts": {
 		"serve": "nodemon dist/server.js",
 		"start": "ts-node server.ts",
@@ -28,6 +28,7 @@
 		"express": "^4.17.1",
 		"jest": "^24.9.0",
 		"nodemon": "^1.19.4",
+		"path": "^0.12.7",
 		"socket.io": "^2.4.1",
 		"ts-node": "^9.1.1",
 		"ts-node-dev": "^1.1.1"
