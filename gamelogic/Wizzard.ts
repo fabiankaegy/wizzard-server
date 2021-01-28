@@ -16,7 +16,6 @@ import log from "../helper";
  * @class Wizzard
  */
 export default class Wizzard {
-
 	players: Player[];
 	rounds: number;
 	player: number;
