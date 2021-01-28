@@ -16,8 +16,12 @@ enum SocketInteractions {
 type SocketInteraction = keyof SocketInteractions;
 
 enum PlayerInteractions {
-	recivePrediction,
-	reciveMove
+	recivePrediction = 'recive_prediction',
+	predictionRecived = 'prediction_recived',
+	reciveMove = 'recive_move',
+	moveRecived = 'move_recived',
+	requestPrediction = 'request_prediction',
+	requestMove = 'request_move',
 };
 
 enum GameState {
