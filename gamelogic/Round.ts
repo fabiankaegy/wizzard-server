@@ -1,6 +1,7 @@
 import Card from "./Card";
 import Deck from "./Deck";
 import Player from "./Player";
+import SubRound from "./SubRound";
 
 export type RoundOptions = {
 	players: Player[],
@@ -23,6 +24,7 @@ export default class Round {
 	trumpf?: Card;
 	shareUpdates: Function;
 	endRound: Function;
+	subRound?: SubRound;
 
 	/**
 	 * Creates an instance of Round.
@@ -39,6 +41,14 @@ export default class Round {
 		this.number = options.currentRound;
 		this.shareUpdates = options.shareUpdates;
 		this.endRound = options.endRound;
+
+		this.start = this.start.bind( this );
+		this.end = this.end.bind( this );
+		this.drawCards = this.drawCards.bind( this );
+		this.drawTrumpf = this.drawTrumpf.bind( this );
+		this.createSubRound = this.createSubRound.bind( this );
+		this.handleUpdates = this.handleUpdates.bind( this );
+
         this.start();
     }
 
@@ -54,7 +64,7 @@ export default class Round {
 		this.deck.shuffle();
 		this.drawCards();
 		this.drawTrumpf();
-		this.shareUpdates({trumpf: this.trumpf});
+		this.createSubRound();
     }
 
     /**
@@ -93,5 +103,23 @@ export default class Round {
     drawTrumpf() {
 		const card = this.deck.drawCard();
 		this.trumpf = card;
+	}
+
+	/**
+	 * createSubRound
+	 *
+	 * @memberof Round
+	 */
+	createSubRound() {
+		this.subRound = new SubRound( {
+			players: this.players,
+			currentRound: this.number,
+			trumpf: this.trumpf,
+			shareUpdates: this.handleUpdates,
+		} );
+	}
+
+	handleUpdates() {
+		this.shareUpdates( { trumpf: this.trumpf } )
 	}
 }
