@@ -1,13 +1,13 @@
 import { Socket } from 'socket.io';
 import Card from './Card';
-import { SocketInteractions } from './Types';
+import { PlayerInteractions, SocketInteractions } from './Types';
 
 export type PlayerPublicInfo = {
 	id: string,
 	name: string,
 	wins: number,
 	prediction: number,
-	score: number
+	score: number,
 };
 
 export interface PlayerPrivateInfo extends PlayerPublicInfo{
@@ -34,6 +34,7 @@ export default class Player {
 	prediction?: number;
 	cards?: Card[];
 	wins: number;
+	isWaitingOnResponse: boolean
 
 	/**
 	 * Creates an instance of Player.
@@ -48,6 +49,7 @@ export default class Player {
 		this.id = options.id || 'none';
 		this.socket = options.socket;
 		this.wins = 0;
+		this.isWaitingOnResponse = false;
 
 		this.socket?.emit( SocketInteractions.playerCreated, this.privateInfo );
 	}
@@ -132,7 +134,7 @@ export default class Player {
 	 * @returns {Number} Index of the card in the players cards
 	 * @memberof Player
 	 */
-	findCardIndex(cardSearched: Card): Number {
+	findCardIndex(cardSearched: Card): number {
 		if ( ! this.cards?.length ) {
 			throw new Error( `This Player doesn't have any card's Jet` );
 		}
@@ -222,5 +224,15 @@ export default class Player {
 	 */
 	get hasCorrectPrediction(): boolean {
 		return this.prediction === this.wins;
+	}
+
+	requestPlayerPrediction() {
+		this.socket?.emit( PlayerInteractions.requestPrediction );
+		this.isWaitingOnResponse = true;
+	}
+	
+	requestPlayerMove() {
+		this.socket?.emit( PlayerInteractions.requestMove );
+		this.isWaitingOnResponse = true;
 	}
 }
