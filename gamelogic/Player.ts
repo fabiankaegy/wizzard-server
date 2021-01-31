@@ -226,11 +226,32 @@ export default class Player {
 		return this.prediction === this.wins;
 	}
 
+	/**
+	 * hasPrediction
+	 *
+	 * @readonly
+	 * @type {boolean}
+	 * @memberof Player
+	 */
+	get hasPrediction(): boolean {
+		return this.prediction !== undefined;
+	}
+
+	/**
+	 * requestPlayerPrediction
+	 *
+	 * @memberof Player
+	 */
 	requestPlayerPrediction() {
 		this.socket?.emit( PlayerInteractions.requestPrediction );
 		this.isWaitingOnResponse = true;
 	}
 	
+	/**
+	 * requestPlayerMove
+	 *
+	 * @memberof Player
+	 */
 	requestPlayerMove() {
 		this.socket?.emit( PlayerInteractions.requestMove );
 		this.isWaitingOnResponse = true;
