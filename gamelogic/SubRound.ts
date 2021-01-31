@@ -9,6 +9,7 @@ type SubRoundOptions = {
 	currentRound: number,
     shareUpdates: Function,
     trumpf?: Card,
+    endSubRound: Function,
 }
 
 /**
@@ -27,13 +28,15 @@ export default class SubRound {
     bestCard?: PlayerCardCombo; 
     currentPlayer?: Player;
     trumpf?: Card;
+    endSubRound: Function;
 
     constructor(options: SubRoundOptions) {
         this.round = options.currentRound;
-        this.players = options.players;
+        this.players = [...options.players];
         this.shareUpdates = options.shareUpdates;
         this.trumpf = options.trumpf;
         this.playedCards = [];
+        this.endSubRound = options.endSubRound;
 
         this.start = this.start.bind( this );
         this.end = this.end.bind( this );
@@ -66,6 +69,7 @@ export default class SubRound {
     end() {
         this.bestCard!.player.increaseWins();
         this.shareUpdates();
+        this.endSubRound( this.bestCard!.player );
     }
 
     /**
@@ -82,7 +86,7 @@ export default class SubRound {
         }
 
         // loop over the players and get the first one that doesn't have a prediction jet
-        let player = this.players.find( player => player.prediction === undefined );
+        let player = this.players.find( player => player.hasPrediction );
 
         if ( player ) {
             // if there is a user without predictions set that player as the current player
@@ -106,7 +110,7 @@ export default class SubRound {
      * @memberof SubRound
      */
     startPlayerMove() {
-        if ( ! this.currentPlayer?.prediction ) {
+        if ( ! this.currentPlayer?.hasPrediction ) {
             this.currentPlayer?.requestPlayerPrediction();
         } else {
             this.currentPlayer?.requestPlayerMove();
@@ -119,7 +123,10 @@ export default class SubRound {
      * @param {Player} player
      * @memberof SubRound
      */
-    handlePlayerGavePrediction( player: Player ) {
+    handlePlayerGavePrediction( player: Player, prediction: string | number ) {
+        player.setPrediction( Number(prediction) );
+        player.socket?.emit( PlayerInteractions.predictionRecived )
+        this.shareUpdates();
         this.setCurrentPlayer();
     }
 
@@ -130,18 +137,23 @@ export default class SubRound {
      * @param {Player} player
      * @memberof SubRound
      */
-    handlePlayerPlayedCard( card: Card, player: Player ) {
+    handlePlayerPlayedCard( player: Player, card: Card ) {
 
-        const isNewBestCard = compareCards(
-            this.bestCard?.card ?? this.playedCards[this.playedCards.length -1].card,
-            card,
+        const index = player.findCardIndex(card);
+        const playedCard = player.playCard(index);
+
+        const isNewBestCard = this.isFirstCard ? true : compareCards(
+            this.bestCard!.card,
+            playedCard,
             this.trumpf?.color );
-
+        
         if ( isNewBestCard ) {
-            this.bestCard = {player, card};
+            this.bestCard = {player, card: playedCard};
         }
 
-        this.playedCards.push( { player, card } );
+        this.playedCards.push( { player, card: playedCard } );
+
+        this.setCurrentPlayer();
     }
 
     /**
@@ -167,23 +179,19 @@ export default class SubRound {
                 }
     
                 if ( type === PlayerInteractions.recivePrediction ) {
-                    log.success( `${player.name} predicted ${value}` );
-                    log.info('');
-                    player.setPrediction( Number(value) );
-                    player.socket?.emit( PlayerInteractions.predictionRecived )
-                    this.handlePlayerGavePrediction( player );
+                    this.handlePlayerGavePrediction( player, value );
                 }
                 
                 if ( type === PlayerInteractions.reciveMove ) {
-                    const card = new Card(value.color, value.value.number);
-                    const index = player.findCardIndex(card);
-                    const playedCard = player.playCard(index);
-                    log.success( `${player.name} played card Nr.: ${card.name}` );
-                    log.info('');
-                    this.handlePlayerPlayedCard( playedCard, player );
+                    const card = new Card(value.color, value.value);
+                    this.handlePlayerPlayedCard( player, card );
                 }
             } );
 
         } )
-	}
+    }
+    
+    get isFirstCard() {
+        return this.playedCards.length === 0;
+    }
 }
