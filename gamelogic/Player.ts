@@ -140,7 +140,7 @@ export default class Player {
 		}
 
 		const card = this.cards.find(
-			card => card.value === cardSearched.value && card.color === cardSearched.color
+			card => card.value.number === cardSearched.value.number && card.color === cardSearched.color
 		);
 
 		if ( !card ) {
