@@ -66,6 +66,8 @@ export default class Player {
 			throw new Error(`The Player ${this.name} already made their prediction.`);
 		}
 
+		this.isWaitingOnResponse = false;
+
 		log.success( `${this.name} predicted ${stashes} stashes` );
         log.info('');
 
@@ -114,6 +116,8 @@ export default class Player {
 		if ( ! this.cards?.length ) {
 			throw new Error( `This Player doesn't have any card's Jet` );
 		}
+
+		this.isWaitingOnResponse = false;
 
 		const card = this.cards[index];
 		this.cards.splice(index, 1);
