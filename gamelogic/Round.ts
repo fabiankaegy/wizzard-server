@@ -1,3 +1,4 @@
+import log from "../helper";
 import Card from "./Card";
 import Deck from "./Deck";
 import Player from "./Player";
@@ -48,6 +49,7 @@ export default class Round {
 		this.drawTrumpf = this.drawTrumpf.bind( this );
 		this.createSubRound = this.createSubRound.bind( this );
 		this.handleUpdates = this.handleUpdates.bind( this );
+		this.handleSubRoundEnd = this.handleSubRoundEnd.bind( this );
 
         this.start();
     }
@@ -76,7 +78,17 @@ export default class Round {
      */
     end() {
         this.endRound();
-    }
+	}
+	
+	/**
+	 * handleSubRoundEnd
+	 *
+	 * @param {Player} winner
+	 * @memberof Round
+	 */
+	handleSubRoundEnd( winner: Player ) {
+		log.info( `The SubRound was won by ${winner.name}!` )
+	}
 
     /**
 	 * drawCards
@@ -116,9 +128,15 @@ export default class Round {
 			currentRound: this.number,
 			trumpf: this.trumpf,
 			shareUpdates: this.handleUpdates,
+			endSubRound: this.handleSubRoundEnd
 		} );
 	}
 
+	/**
+	 * handleUpdates
+	 *
+	 * @memberof Round
+	 */
 	handleUpdates() {
 		this.shareUpdates( { trumpf: this.trumpf } )
 	}
