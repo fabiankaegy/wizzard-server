@@ -16,9 +16,9 @@ export default class Card {
 	 * @param {*} number
 	 * @memberof Card
 	 */
-	constructor(color: string, number: CardValue) {
+	constructor(color: string, value: CardValue) {
 		this.color = color;
-		this.value = number;
+		this.value = value;
 	}
 
 	/**
