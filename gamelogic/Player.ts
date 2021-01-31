@@ -1,4 +1,5 @@
 import { Socket } from 'socket.io';
+import log from '../helper';
 import Card from './Card';
 import { PlayerInteractions, SocketInteractions } from './Types';
 
@@ -65,6 +66,9 @@ export default class Player {
 			throw new Error(`The Player ${this.name} already made their prediction.`);
 		}
 
+		log.success( `${this.name} predicted ${stashes} stashes` );
+        log.info('');
+
 		this.resetWins();
 		this.prediction = stashes;
 	}
@@ -113,7 +117,7 @@ export default class Player {
 
 		const card = this.cards[index];
 		this.cards.splice(index, 1);
-		console.log(`${this.name} played ${card.name}`);
+		log.success(`${this.name} played: ${card.name}`);
 		return card;
 	}
 
