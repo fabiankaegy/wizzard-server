@@ -29,7 +29,7 @@ export default class Card {
 	 * @memberof Card
 	 */
 	get name(): string {
-		return `${this.color} ${this.value.sign}`;
+		return `${this.color} ${this.sign}`;
 	}
 
 	/**
