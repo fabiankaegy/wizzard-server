@@ -157,7 +157,7 @@ export default class Player {
 	 * @memberof Player
 	 */
 	increaseWins( by: number = 1 ) {
-		this.wins = this.wins +by;
+		this.wins = this.wins + by;
 	}
 
 	/**
