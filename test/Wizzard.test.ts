@@ -8,11 +8,11 @@ describe("Deck", () => {
 		myGame = new Wizzard([new Player({name: "Fabian"}), new Player({name: "Moritz"}), new Player({name: "Bea"}), new Player({name: "Michel"})]);
 	});
 
-	it("Player count works", () => {
+	test("Player count works", () => {
 		expect(myGame.player).toBe(4);
 	});
 
-	it("has method to reorder players", () => {
+	test("has method to reorder players", () => {
 		const firstBefore = myGame.players[0];
 		const seccondBefore = myGame.players[1];
 		myGame.movePlayerIndex();

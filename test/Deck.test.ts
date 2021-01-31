@@ -7,7 +7,7 @@ describe("Deck", () => {
 		myDeck = new Deck();
 	});
 
-	it("has a working shuffle method", () => {
+	test("has a working shuffle method", () => {
 		const preShuffle = [...myDeck.cards];
 
 		myDeck.shuffle();
@@ -22,7 +22,7 @@ describe("Deck", () => {
 		expect(conditioin).toBe(true);
 	});
 
-	it("can draw cards", () => {
+	test("can draw cards", () => {
 		const initialAmount = myDeck.remainingCards;
 		const amount = 5;
 		
