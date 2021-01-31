@@ -25,4 +25,15 @@ describe("Player", () => {
 		Fabian.calculateScore();
 		expect(Fabian.score).toBe(50);
 	});
+
+	it("recognizes all kinds of predictions", () => {
+		Fabian.setPrediction(0);
+		expect(Fabian.hasPrediction).toBe(true);
+
+		// reset prediction
+		Fabian.prediction = undefined;
+
+		Fabian.setPrediction(2);
+		expect(Fabian.hasPrediction).toBe(true);
+	})
 });
