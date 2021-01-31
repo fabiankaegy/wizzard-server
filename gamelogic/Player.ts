@@ -34,7 +34,7 @@ export default class Player {
 	prediction?: number;
 	cards?: Card[];
 	wins: number;
-	isWaitingOnResponse: boolean
+	isWaitingOnResponse: boolean;
 
 	/**
 	 * Creates an instance of Player.
