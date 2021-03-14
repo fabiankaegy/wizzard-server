@@ -4,8 +4,7 @@
 	"description": "",
 	"main": "index.ts",
 	"scripts": {
-		"serve": "nodemon dist/server.js",
-		"start": "ts-node server.ts",
+		"start": "nodemon server.ts",
 		"build": "tsc --project tsconfig.json",
 		"test": "jest --watchAll --silent",
 		"test:coverage": "jest --silent --coverage"
